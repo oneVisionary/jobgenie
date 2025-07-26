@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - JobGenie</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <h2>JobGenie</h2>
+                    <span class="ai-badge">AI</span>
+                </div>
+                <h1>Create Your Account</h1>
+                <p>Start your AI-powered job search journey today</p>
+            </div>
+
+            <!-- Flash messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                      <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+
+            <!-- User Type Selection -->
+            <div class="user-type-selection" id="userTypeSelection">
+                <h3>I want to:</h3>
+                <div class="user-type-options">
+                    <div class="user-type-option" data-type="jobseeker">
+                        <div class="user-type-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h4>Find a Job</h4>
+                        <p>Search and apply for jobs with AI assistance</p>
+                    </div>
+                    <div class="user-type-option" data-type="company">
+                        <div class="user-type-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h4>Hire Talent</h4>
+                        <p>Post jobs and manage applications</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registration Form -->
+            <form class="auth-form" id="registerForm" action="{{ url_for('register') }}" method="POST" style="display: none;">
+                <div class="selected-type" id="selectedType"></div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="firstName" name="firstName" required placeholder="First name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="lastName" name="lastName" required placeholder="Last name">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" required placeholder="Enter your email">
+                    </div>
+                </div>
+
+                <div class="form-group" id="companyFields" style="display: none;">
+                    <label for="companyName">Company Name</label>
+                    <div class="input-group">
+                        <i class="fas fa-building"></i>
+                        <input type="text" id="companyName" name="companyName" placeholder="Enter company name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" required placeholder="Create a password">
+                        <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+                        <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-ghost" onclick="goBack()">
+                        <i class="fas fa-arrow-left"></i>
+                        Back
+                    </button>
+                </div>
+            </form>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="{{ url_for('login') }}">Sign in</a></p>
+                <a href="{{ url_for('home') }}" class="back-home">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </a>
+            </div>
+        </div>
+
+        <div class="auth-image">
+            <div class="auth-image-content">
+                <h2>Transform Your Career Journey</h2>
+                <p>Join thousands of professionals and companies using AI to revolutionize hiring and job searching.</p>
+            </div>
+            <div class="auth-bg-overlay"></div>
+            <img src="https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Modern office environment">
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const userTypeOptions = document.querySelectorAll(".user-type-option");
+            const registerForm = document.getElementById("registerForm");
+            const selectedType = document.getElementById("selectedType");
+            const companyFields = document.getElementById("companyFields");
+            const userTypeSelection = document.getElementById("userTypeSelection");
+
+            userTypeOptions.forEach(option => {
+                option.addEventListener("click", () => {
+                    const type = option.getAttribute("data-type");
+
+                    registerForm.style.display = "block";
+                    userTypeSelection.style.display = "none";
+
+                    userTypeOptions.forEach(o => o.classList.remove("selected"));
+                    option.classList.add("selected");
+
+                    selectedType.innerHTML = `
+                        <input type="hidden" name="userType" value="${type}">
+                        <p>You selected: <strong>${type === "jobseeker" ? "Job Seeker" : "Company"}</strong></p>
+                    `;
+
+                    if (type === "company") {
+                        companyFields.style.display = "block";
+                    } else {
+                        companyFields.style.display = "none";
+                    }
+                });
+            });
+        });
+
+        function togglePassword(fieldId) {
+            const input = document.getElementById(fieldId);
+            const icon = input.nextElementSibling.querySelector("i");
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+
+        function goBack() {
+            document.getElementById("registerForm").style.display = "none";
+            document.getElementById("userTypeSelection").style.display = "block";
+        }
+    </script>
+</body>
+</html>

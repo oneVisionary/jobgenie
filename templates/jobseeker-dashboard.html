@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Seeker Dashboard - JobGenie</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="header-left">
+            <div class="logo">
+                <h2>JobGenie</h2>
+                <span class="ai-badge">AI</span>
+            </div>
+            <div class="user-info">
+                <h3 id="userName">{{ session['first_name'] }}</h3>
+                <span class="user-type">Job Seeker</span>
+            </div>
+        </div>
+      
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active">
+                        <a href="#overview" class="nav-link" data-section="overview">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Overview</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="#applications" class="nav-link" data-section="applications">
+                            <i class="fas fa-file-alt"></i>
+                            <span>My Applications</span>
+                            
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="#profile" class="nav-link" data-section="profile">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a href="{{ url_for('home') }}" class="nav-link" >
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                            
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Overview Section -->
+            <section id="overview" class="dashboard-section active">
+                <div class="section-header">
+                    <h1>Welcome back, {{ session['first_name'] }}!</h1>
+                    <p>Here's your job search progress and latest opportunities.</p>
+                </div>
+
+            
+               
+            </section>
+
+          
+
+        
+
+        </main>
+    </div>
+
+  
+
+    <script src="static/dashboard.js"></script>
+</body>
+</html>
